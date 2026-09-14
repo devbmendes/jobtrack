@@ -11,13 +11,10 @@ public class UserServiceImpl implements UserService{
     public UserServiceImpl(UserRepository userRepository){
         this.userRepository = userRepository;
     }
-    
-    public UserRepository getUserRepository(){
-        return userRepository;
-    }
+
 
     @Override
-    public User creat(User user) {
-        return null;
+    public User create(User user) {
+        return userRepository.save(user);
     }
 }
