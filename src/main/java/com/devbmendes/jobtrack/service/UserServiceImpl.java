@@ -1,6 +1,7 @@
 package com.devbmendes.jobtrack.service;
 
 import com.devbmendes.jobtrack.entity.User;
+import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -27,12 +28,17 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<User> findById(Long id) {
-        return userRepository.findById(id);
+    public User findById(Long id) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if (userOptional.isEmpty()){
+            throw new ResourceNotFoundException("User not found with id : "+id);
+        }
+        return userOptional.get();
     }
 
     @Override
     public User update(Long id, User user) {
+        findById(id);
         return userRepository.save(user);
     }
 
