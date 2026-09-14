@@ -1,9 +1,17 @@
 package com.devbmendes.jobtrack.service;
 
 import com.devbmendes.jobtrack.entity.User;
-import com.devbmendes.jobtrack.repository.UserRepository;
+
+
+import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
-    public User create(User user);
+     User create(User user);
+
+     List<User> findAll();
+     Optional<User> findById(Long id);
+     User update(Long id, User user);
+     void delete(Long id);
 
 }
