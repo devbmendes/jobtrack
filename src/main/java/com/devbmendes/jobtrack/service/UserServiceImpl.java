@@ -1,6 +1,7 @@
 package com.devbmendes.jobtrack.service;
 
 import com.devbmendes.jobtrack.entity.User;
+import com.devbmendes.jobtrack.exceptions.EmailAlreadyExistsException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,12 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User create(User user) {
-        return userRepository.save(user);
+        if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
+            return userRepository.save(user);
+        }
+        throw new
+                EmailAlreadyExistsException("User with  email: "+user.getEmail()+" already exists");
+
     }
 
     @Override
