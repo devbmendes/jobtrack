@@ -1,6 +1,7 @@
 package com.devbmendes.jobtrack.controller;
 
 import com.devbmendes.jobtrack.dto.ApiResponse;
+import com.devbmendes.jobtrack.dto.UserRequest;
 import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.service.UserService;
@@ -22,8 +23,9 @@ public class UserController {
     }
 
     @PostMapping ("/")
-    public ResponseEntity<ApiResponse<UserResponse>>saveUser(@Valid @RequestBody User user){
-        UserResponse userCreated = userService.create(user);
+    public ResponseEntity<ApiResponse<UserResponse>>saveUser(@Valid @RequestBody UserRequest user){
+        UserResponse userCreated =
+                userService.create(user);
         return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>("User Created",userCreated));
     }

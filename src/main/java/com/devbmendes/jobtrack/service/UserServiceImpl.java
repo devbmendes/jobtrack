@@ -1,12 +1,15 @@
 package com.devbmendes.jobtrack.service;
 
+import com.devbmendes.jobtrack.dto.UserRequest;
 import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.User;
+import com.devbmendes.jobtrack.enums.Role;
 import com.devbmendes.jobtrack.exceptions.EmailAlreadyExistsException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -25,9 +28,19 @@ public class UserServiceImpl implements UserService{
         return new UserResponse(user.getName(),user.getEmail(),user.getCreatedAt());
     }
     @Override
-    public UserResponse create(User user) {
+    public UserResponse create(UserRequest user) {
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            return convertUser(user);
+            User saveUser = new User();
+            saveUser.setName(user.getName());
+            saveUser.setEmail(user.getEmail());
+            saveUser.setPassword(user.getPassword());
+            saveUser.setCreatedAt(LocalDateTime.now());
+            if(user.getRole().equalsIgnoreCase("admin")){
+                saveUser.setRole(Role.ADMIN);
+            }else {
+                saveUser.setRole(Role.USER);
+            }
+            return convertUser(userRepository.save(saveUser));
         }
         throw new
                 EmailAlreadyExistsException("User with  email: "+user.getEmail()+" already exists");
