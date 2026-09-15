@@ -44,12 +44,30 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User update(Long id, User user) {
-        findById(id);
-        return userRepository.save(user);
+
+        User userById = findById(id);
+
+        Optional<User> userByEmail =
+                userRepository.findByEmail(user.getEmail());
+
+        if (userByEmail.isPresent() &&
+                !userByEmail.get().getId().equals(id)) {
+
+            throw new EmailAlreadyExistsException(
+                    "User with email : " + user.getEmail() + " already exist"
+            );
+        }
+
+        userById.setName(user.getName());
+        userById.setEmail(user.getEmail());
+        userById.setPassword(user.getPassword());
+
+        return userRepository.save(userById);
     }
 
     @Override
     public void delete(Long id) {
-            userRepository.deleteById(id);
+        findById(id);
+        userRepository.deleteById(id);
     }
 }
