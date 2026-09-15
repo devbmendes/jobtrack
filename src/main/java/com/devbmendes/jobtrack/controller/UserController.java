@@ -1,6 +1,7 @@
 package com.devbmendes.jobtrack.controller;
 
 import com.devbmendes.jobtrack.dto.ApiResponse;
+import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.service.UserService;
 
@@ -21,18 +22,18 @@ public class UserController {
     }
 
     @PostMapping ("/")
-    public ResponseEntity<ApiResponse<User>>saveUser(@Valid @RequestBody User user){
-        User userCreated = userService.create(user);
+    public ResponseEntity<ApiResponse<UserResponse>>saveUser(@Valid @RequestBody User user){
+        UserResponse userCreated = userService.create(user);
         return  ResponseEntity.status(HttpStatus.CREATED)
                 .body(new ApiResponse<>("User Created",userCreated));
     }
     @GetMapping("/")
-    public ResponseEntity<ApiResponse<List<User>>> findAll(){
+    public ResponseEntity<ApiResponse<List<UserResponse>>> findAll(){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("All users",userService.findAll()));
     }
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> findById(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<UserResponse>> findById(@PathVariable Long id){
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("User with id : "+id,userService.findById(id)));
     }
@@ -43,9 +44,9 @@ public class UserController {
                 .body(new ApiResponse<>("User deleted",null));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<User>> updateUser(
+    public ResponseEntity<ApiResponse<UserResponse>> updateUser(
             @PathVariable Long id,@RequestBody User user){
-        User userUpdated = userService.update(id,user);
+        UserResponse userUpdated = userService.update(id,user);
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("User updated",userUpdated));
 

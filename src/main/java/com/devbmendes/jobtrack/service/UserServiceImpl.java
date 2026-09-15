@@ -1,11 +1,14 @@
 package com.devbmendes.jobtrack.service;
 
+import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.exceptions.EmailAlreadyExistsException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,11 +20,14 @@ public class UserServiceImpl implements UserService{
         this.userRepository = userRepository;
     }
 
+    private UserResponse convertUser(User user){
 
+        return new UserResponse(user.getName(),user.getEmail(),user.getCreatedAt());
+    }
     @Override
-    public User create(User user) {
+    public UserResponse create(User user) {
         if (userRepository.findByEmail(user.getEmail()).isEmpty()) {
-            return userRepository.save(user);
+            return convertUser(user);
         }
         throw new
                 EmailAlreadyExistsException("User with  email: "+user.getEmail()+" already exists");
@@ -29,23 +35,36 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> findAll() {
-        return userRepository.findAll();
+    public List<UserResponse> findAll() {
+        List<User> users = userRepository.findAll();
+        List<UserResponse> userResponseList = new ArrayList<>();
+
+        for (User user : users) {
+            UserResponse userResponse = new UserResponse(
+                    user.getName(),
+                    user.getEmail(),
+                    user.getCreatedAt()
+            );
+            userResponseList.add(userResponse);
+        }
+
+        return userResponseList;
     }
 
     @Override
-    public User findById(Long id) {
+    public UserResponse findById(Long id) {
         Optional<User> userOptional = userRepository.findById(id);
         if (userOptional.isEmpty()){
             throw new ResourceNotFoundException("User not found with id : "+id);
         }
-        return userOptional.get();
+        return new UserResponse(userOptional.get().getName(),userOptional.get().getEmail()
+        ,userOptional.get().getCreatedAt());
     }
 
     @Override
-    public User update(Long id, User user) {
+    public UserResponse update(Long id, User user) {
 
-        User userById = findById(id);
+        Optional<User> userById = userRepository.findById(id);
 
         Optional<User> userByEmail =
                 userRepository.findByEmail(user.getEmail());
@@ -58,11 +77,12 @@ public class UserServiceImpl implements UserService{
             );
         }
 
-        userById.setName(user.getName());
-        userById.setEmail(user.getEmail());
-        userById.setPassword(user.getPassword());
+        userById.get().setName(user.getName());
+        userById.get().setEmail(user.getEmail());
+        userById.get().setPassword(user.getPassword());
 
-        return userRepository.save(userById);
+        User save = userRepository.save(userById.get());
+        return new UserResponse(save.getName(),save.getEmail(),save.getCreatedAt());
     }
 
     @Override
