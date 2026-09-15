@@ -2,6 +2,7 @@ package com.devbmendes.jobtrack.entity;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ public class Company {
     private String websiteUrl;
     private String location;
     private String description;
+    private LocalDateTime createdAt;
 
 
     @OneToMany(mappedBy = "company")
@@ -27,6 +29,7 @@ public class Company {
         this.websiteUrl = websiteUrl;
         this.location = location;
         this.description = description;
+        this.createdAt = LocalDateTime.now();
 
     }
     public Company(){
@@ -75,5 +78,9 @@ public class Company {
 
     public void setJobApplications(List<JobApplication> jobApplications) {
         this.jobApplications = jobApplications;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
     }
 }
