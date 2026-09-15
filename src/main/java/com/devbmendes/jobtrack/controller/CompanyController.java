@@ -31,4 +31,24 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("All companies",list));
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<CompanyResponse>> findById(@PathVariable Long id){
+        CompanyResponse companyResponse = companyService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("Company founded",companyResponse));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteById(@PathVariable Long id){
+        companyService.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("Company deleted",null));
+    }
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<CompanyResponse>> updateById(@PathVariable Long id,
+    @RequestBody CompanyRequest companyRequest){
+        CompanyResponse companyResponse = companyService.update(id,companyRequest);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(new ApiResponse<>("Company updated",companyResponse));
+
+    }
 }

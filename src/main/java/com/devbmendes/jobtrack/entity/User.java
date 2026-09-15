@@ -2,8 +2,7 @@ package com.devbmendes.jobtrack.entity;
 
 import com.devbmendes.jobtrack.enums.Role;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
+
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -15,6 +14,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    @Column(nullable = false,unique = true)
     private String email;
     private String password;
 

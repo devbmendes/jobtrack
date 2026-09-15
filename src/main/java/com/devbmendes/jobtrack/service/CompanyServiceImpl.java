@@ -3,6 +3,7 @@ package com.devbmendes.jobtrack.service;
 import com.devbmendes.jobtrack.dto.CompanyRequest;
 import com.devbmendes.jobtrack.dto.CompanyResponse;
 import com.devbmendes.jobtrack.entity.Company;
+import com.devbmendes.jobtrack.exceptions.CompanyAlreadyExistsException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,11 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public CompanyResponse findById(Long id) {
-        return null;
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        if (companyOptional.isEmpty()){
+            throw new ResourceNotFoundException("Company whit this id : "+id+" not found");
+        }
+        return convertCompany(companyOptional.get());
     }
 
     @Override
@@ -63,11 +68,27 @@ public class CompanyServiceImpl implements CompanyService{
 
     @Override
     public CompanyResponse update(Long id, CompanyRequest companyRequest) {
-        return null;
+        Optional<Company> companyOptional = companyRepository.findById(id);
+        Optional<Company> companyByName = companyRepository.findByNameIgnoreCase(companyRequest.getName());
+        if (companyByName.isPresent() && !companyByName.get().getId().equals(id)){
+            throw new CompanyAlreadyExistsException("Company with name : "+companyRequest.getName()+"" +
+                    " already exists");
+        }
+        companyOptional.get().setName(companyRequest.getName());
+        companyOptional.get().setLocation(companyRequest.getLocation());
+        companyOptional.get().setDescription(companyRequest.getDescription());
+        companyOptional.get().setWebsiteUrl(companyRequest.getWebsiteUrl());
+        Company updated = companyRepository.save(companyOptional.get());
+        return new CompanyResponse(updated.getName(),updated.getWebsiteUrl(),updated.getLocation(),
+                updated.getDescription(), updated.getCreatedAt());
     }
 
     @Override
     public void deleteById(Long id) {
+        CompanyResponse companyResponse = findById(id);
+        if (companyResponse!= null){
+            companyRepository.deleteById(id);
+        }
 
     }
 
