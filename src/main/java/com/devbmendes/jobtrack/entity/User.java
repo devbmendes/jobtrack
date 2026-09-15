@@ -6,6 +6,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -13,19 +14,16 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
     private String name;
-    @NotBlank
-    @Column(unique = true,nullable = false)
-    @Email
     private String email;
-    @NotBlank
     private String password;
 
     @Enumerated(EnumType.STRING)
     private Role role;
     private LocalDateTime createdAt;
 
+    @ManyToMany(mappedBy = "users")
+    private Set<JobApplication> jobApplications;
 
     public User(){
 

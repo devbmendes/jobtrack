@@ -30,6 +30,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT)
                 .body(response);
     }
+    @ExceptionHandler(CompanyAlreadyExistsException.class)
+    public ResponseEntity<ApiResponse<Void>> handleCompanyAlreadyExistsException(
+            CompanyAlreadyExistsException exception){
+        ApiResponse<Void> response = new ApiResponse<>(exception.getMessage(),null);
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(response);
+    }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
             MethodArgumentNotValidException exception
