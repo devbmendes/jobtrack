@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
+
 @Entity
 public class JobApplication {
     @Id
@@ -17,28 +18,20 @@ public class JobApplication {
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @OneToMany(mappedBy = "jobApplication")
+    private Set<UserJobApplication> userJobApplications = new HashSet<>();
     private String position;
     private String requirements;
-    @ManyToMany
-    @JoinTable(
-            name = "user_job_application",
-            joinColumns = @JoinColumn(name = "job_application_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
-    )
-    private Set<User> users = new HashSet<>();
     private String location;
-    @Enumerated(EnumType.STRING)
-    private Status status;
     private String notes;
     private LocalDateTime createdAt;
 
     public JobApplication(Company company, String position,
-                          String requirements,String location, Status status, String notes) {
+                          String requirements,String location, String notes) {
         this.company = company;
         this.position = position;
         this.requirements = requirements;
         this.location = location;
-        this.status = status;
         this.notes = notes;
         this.createdAt = LocalDateTime.now();
     }
@@ -64,13 +57,6 @@ public class JobApplication {
         this.location = location;
     }
 
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
 
     public String getNotes() {
         return notes;
@@ -87,13 +73,6 @@ public class JobApplication {
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
-    }
 
     public String getPosition() {
         return position;
@@ -109,5 +88,8 @@ public class JobApplication {
 
     public void setRequirements(String requirements) {
         this.requirements = requirements;
+    }
+    public Set<UserJobApplication> getUserJobApplications() {
+        return userJobApplications;
     }
 }

@@ -59,5 +59,16 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST).body(response);
 
     }
+    @ExceptionHandler(UserAlreadyAssociatedException.class)
+    public ResponseEntity<ApiResponse<Void>> handleUserAlreadyAssociated(
+            UserAlreadyAssociatedException exception) {
+
+        ApiResponse<Void> response =
+                new ApiResponse<>(exception.getMessage(), null);
+
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(response);
+    }
 
 }

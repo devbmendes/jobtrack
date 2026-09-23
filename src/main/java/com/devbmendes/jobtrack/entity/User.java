@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -22,8 +23,8 @@ public class User {
     private Role role;
     private LocalDateTime createdAt;
 
-    @ManyToMany(mappedBy = "users")
-    private Set<JobApplication> jobApplications;
+    @OneToMany(mappedBy = "user")
+    private Set<UserJobApplication> userJobApplications = new HashSet<>();
 
     public User(){
 
@@ -70,6 +71,10 @@ public class User {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public Set<UserJobApplication> getUserJobApplications() {
+        return userJobApplications;
     }
 
     public LocalDateTime getCreatedAt() {
