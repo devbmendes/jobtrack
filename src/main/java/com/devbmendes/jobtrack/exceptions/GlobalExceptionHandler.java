@@ -22,6 +22,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
 
     }
+    @ExceptionHandler(InvalidStatusException.class)
+    public ResponseEntity<ApiResponse<Void>> handleInvalidStatusException
+            (InvalidStatusException exception){
+        ApiResponse<Void> response = new ApiResponse<>(exception.getMessage(),null);
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+
+    }
     @ExceptionHandler(EmailAlreadyExistsException.class)
     public ResponseEntity<ApiResponse<Void>> handleEmailAlreadyExistsException(
             EmailAlreadyExistsException exception

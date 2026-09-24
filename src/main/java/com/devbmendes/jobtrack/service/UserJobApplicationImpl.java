@@ -1,14 +1,20 @@
 package com.devbmendes.jobtrack.service;
 
+import com.devbmendes.jobtrack.dto.UpdateStatusRequest;
 import com.devbmendes.jobtrack.dto.UserJobAppResponse;
 import com.devbmendes.jobtrack.entity.JobApplication;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.entity.UserJobApplication;
+import com.devbmendes.jobtrack.enums.Status;
+import com.devbmendes.jobtrack.exceptions.InvalidStatusException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.exceptions.UserAlreadyAssociatedException;
 import com.devbmendes.jobtrack.repository.UserJobApplicationRepository;
 import com.devbmendes.jobtrack.repository.UserRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserJobApplicationImpl implements UserJobApplicationService {
@@ -60,5 +66,37 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
                 userJobApplicationSaved.getId(),
                 userJobApplicationSaved.getStatus().toString(),
                 userJobApplicationSaved.getCreatedAt().toString());
+    }
+
+    @Override
+    public List<UserJobApplication> getAll() {
+        return userJobApplicationRepository.findAll();
+    }
+
+    @Override
+    public UserJobApplication findByReference(String reference) {
+        return userJobApplicationRepository.findByReference(reference)
+                .orElseThrow(()-> new ResourceNotFoundException("Application with this reference : "+reference+" not found")
+                );
+    }
+
+    @Override
+    public void updateStatusJob(UpdateStatusRequest request) {
+
+        UserJobApplication userJobApplication = findByReference(request.getReference());
+        Status status;
+
+        try {
+            status = Status.valueOf(
+                    request.getStatus().toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException(
+                    "Invalid status: " + request.getStatus()
+            );
+        }
+
+        userJobApplication.setStatus(status);
+        userJobApplicationRepository.save(userJobApplication);
     }
 }
