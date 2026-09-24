@@ -1,5 +1,7 @@
 package com.devbmendes.jobtrack.service;
 
+import com.devbmendes.jobtrack.dto.UserJobAppResponse;
+
 public interface UserJobApplicationService {
-    public void saveUserJobApplication(Long userId,Long companyId);
+    public UserJobAppResponse saveUserJobApplication(Long userId, Long companyId);
 }

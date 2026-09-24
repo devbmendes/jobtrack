@@ -1,5 +1,6 @@
 package com.devbmendes.jobtrack.service;
 
+import com.devbmendes.jobtrack.dto.UserJobAppResponse;
 import com.devbmendes.jobtrack.entity.JobApplication;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.entity.UserJobApplication;
@@ -7,7 +8,9 @@ import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.exceptions.UserAlreadyAssociatedException;
 import com.devbmendes.jobtrack.repository.UserJobApplicationRepository;
 import com.devbmendes.jobtrack.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserJobApplicationImpl implements UserJobApplicationService {
 
     private final UserRepository userRepository;
@@ -22,7 +25,7 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
     }
 
     @Override
-    public void saveUserJobApplication(Long userId, Long jobApplicationId) {
+    public UserJobAppResponse saveUserJobApplication(Long userId, Long jobApplicationId) {
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() ->
@@ -51,6 +54,11 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
         UserJobApplication userJobApplication =
                 new UserJobApplication(user, jobApplication);
 
-        userJobApplicationRepository.save(userJobApplication);
+        UserJobApplication userJobApplicationSaved = userJobApplicationRepository.save(userJobApplication);
+        return new UserJobAppResponse(
+                userJobApplicationSaved.getUserJobReference(),
+                userJobApplicationSaved.getId(),
+                userJobApplicationSaved.getStatus().toString(),
+                userJobApplicationSaved.getCreatedAt().toString());
     }
 }

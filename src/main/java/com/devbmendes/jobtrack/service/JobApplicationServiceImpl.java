@@ -6,21 +6,20 @@ import com.devbmendes.jobtrack.entity.JobApplication;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.CompanyRepository;
 import com.devbmendes.jobtrack.repository.JobApplicationRepository;
-import com.devbmendes.jobtrack.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class JobApplicationServiceImpl implements JobApplicationService{
 
     private final JobApplicationRepository jobApplicationRepository;
     private final CompanyRepository companyRepository;
-    private final UserRepository userRepository;
 
-    public JobApplicationServiceImpl(JobApplicationRepository jobApplicationRepository, CompanyRepository companyRepository, UserRepository userRepository) {
+    public JobApplicationServiceImpl(JobApplicationRepository jobApplicationRepository, CompanyRepository companyRepository) {
         this.jobApplicationRepository = jobApplicationRepository;
         this.companyRepository = companyRepository;
-        this.userRepository = userRepository;
     }
 
     public JobApplication findById(Long jobApplicationId) {

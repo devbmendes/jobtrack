@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/job-applications")
-public class UserJobApllicationController {
+public class UserJobApplicationController {
     private final UserJobApplicationService userJobApplicationService;
 
-    public UserJobApllicationController(UserJobApplicationService userJobApplicationService) {
+    public UserJobApplicationController(UserJobApplicationService userJobApplicationService) {
         this.userJobApplicationService = userJobApplicationService;
     }
 
