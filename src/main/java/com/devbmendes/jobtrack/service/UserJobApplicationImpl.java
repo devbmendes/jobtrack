@@ -99,4 +99,15 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
         userJobApplication.setStatus(status);
         userJobApplicationRepository.save(userJobApplication);
     }
+
+    @Override
+    public void deleteById(Long userJobApplication) {
+        Optional<UserJobApplication> userFound = userJobApplicationRepository.findById(userJobApplication);
+        if (userFound.isEmpty()){
+            throw new ResourceNotFoundException("JobApplication with this ID :"+userJobApplication
+            +" not found");
+        }
+        userJobApplicationRepository.deleteById(userJobApplication);
+
+    }
 }

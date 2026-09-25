@@ -12,4 +12,5 @@ public interface UserJobApplicationService {
     public List<UserJobApplication> getAll();
     public UserJobApplication findByReference(String reference);
     public void updateStatusJob(UpdateStatusRequest updateStatusRequest);
+    public void deleteById(Long userJobApplication);
 }

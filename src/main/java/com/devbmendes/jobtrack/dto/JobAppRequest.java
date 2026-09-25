@@ -1,12 +1,17 @@
 package com.devbmendes.jobtrack.dto;
 
 
+import jakarta.validation.constraints.NotBlank;
 
 public class JobAppRequest {
 
+    @NotBlank
     private Long companyId;
+    @NotBlank
     private String position;
+    @NotBlank
     private String requirements;
+    @NotBlank
     private String location;
     private String notes;
 

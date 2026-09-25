@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 public class CompanyRequest {
     @NotBlank
     private String name;
+    @NotBlank
     private String websiteUrl;
     @NotBlank
     private String location;
+    @NotBlank
     private String description;
 
     public CompanyRequest(String name, String websiteUrl, String location, String description) {

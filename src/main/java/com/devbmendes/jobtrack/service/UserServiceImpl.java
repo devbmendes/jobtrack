@@ -75,7 +75,7 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public UserResponse update(Long id, User user) {
+    public UserResponse update(Long id, UserRequest user) {
 
         Optional<User> userById = userRepository.findById(id);
 

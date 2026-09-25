@@ -46,11 +46,11 @@ public class UserController {
                 .body(new ApiResponse<>("User deleted",null));
     }
     @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<UserResponse>> updateUser(
-            @PathVariable Long id,@RequestBody User user){
+    public ResponseEntity<ApiResponse<Void>> updateUser(
+            @PathVariable Long id,@RequestBody UserRequest user){
         UserResponse userUpdated = userService.update(id,user);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(new ApiResponse<>("User updated",userUpdated));
+                .body(new ApiResponse<>("User updated",null));
 
     }
 
