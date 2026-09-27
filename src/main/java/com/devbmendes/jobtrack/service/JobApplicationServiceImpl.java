@@ -41,13 +41,13 @@ public class JobApplicationServiceImpl implements JobApplicationService{
     }
 
     @Override
-    public JobApplication saveJobApplication(JobAppRequest userJobAppRequest) {
+    public JobApplication saveJobApplication(JobAppRequest jobAppRequest) {
         JobApplication jobApplication = new JobApplication();
-        Company companyJobApplication = findCompanyById(userJobAppRequest.getCompanyId());
+        Company companyJobApplication = findCompanyById(jobAppRequest.getCompanyId());
         jobApplication.setCompany(companyJobApplication);
-        jobApplication.setLocation(userJobAppRequest.getLocation());
-        jobApplication.setPosition(userJobAppRequest.getPosition());
-        jobApplication.setNotes(userJobAppRequest.getNotes());
+        jobApplication.setLocation(jobAppRequest.getLocation());
+        jobApplication.setPosition(jobAppRequest.getPosition());
+        jobApplication.setNotes(jobAppRequest.getNotes());
 
         return jobApplicationRepository.save(jobApplication);
     }

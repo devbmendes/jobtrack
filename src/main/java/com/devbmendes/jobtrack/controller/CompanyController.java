@@ -31,6 +31,7 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(new ApiResponse<>("All companies",list));
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<CompanyResponse>> findById(@PathVariable Long id){
         CompanyResponse companyResponse = companyService.findById(id);

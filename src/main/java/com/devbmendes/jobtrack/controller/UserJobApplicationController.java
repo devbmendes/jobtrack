@@ -3,12 +3,17 @@ package com.devbmendes.jobtrack.controller;
 import com.devbmendes.jobtrack.dto.ApiResponse;
 import com.devbmendes.jobtrack.dto.UpdateStatusRequest;
 import com.devbmendes.jobtrack.dto.UserJobAppResponse;
+import com.devbmendes.jobtrack.dto.UserResponse;
+import com.devbmendes.jobtrack.entity.UserJobApplication;
 import com.devbmendes.jobtrack.repository.UserJobApplicationRepository;
 import com.devbmendes.jobtrack.service.UserJobApplicationService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/job-applications")
@@ -55,5 +60,13 @@ public class UserJobApplicationController {
         userJobApplicationService.deleteById(id);
         return ResponseEntity.ok(new ApiResponse<>("UserJob deleted",
                 null));
+    }
+    @GetMapping("/jobs")
+    public List<UserJobApplication> findByRole(@RequestParam Long userId, @RequestParam String status) {
+         return userJobApplicationService.findByUserIdAndStatus(
+                userId,
+                status
+        );
+
     }
 }

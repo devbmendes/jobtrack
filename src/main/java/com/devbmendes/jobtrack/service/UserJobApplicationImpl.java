@@ -110,4 +110,25 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
         userJobApplicationRepository.deleteById(userJobApplication);
 
     }
+
+    @Override
+    public List<UserJobApplication> findByUserIdAndStatus(Long userId, String statusRequest) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "User with ID: " + userId + " not found"
+                ));
+        Status status;
+
+        try {
+            status = Status.valueOf(
+                    statusRequest.toUpperCase()
+            );
+        } catch (IllegalArgumentException e) {
+            throw new InvalidStatusException(
+                    "Invalid status: " + statusRequest
+            );
+        }
+        return userJobApplicationRepository.findByUserIdAndStatus(userId,status);
+
+    }
 }
