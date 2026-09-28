@@ -1,6 +1,5 @@
 package com.devbmendes.jobtrack.entity;
-
-import com.devbmendes.jobtrack.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,9 +15,11 @@ public class JobApplication {
 
     @ManyToOne
     @JoinColumn(name = "company_id")
+    @JsonIgnore
     private Company company;
 
     @OneToMany(mappedBy = "jobApplication")
+    @JsonIgnore
     private Set<UserJobApplication> userJobApplications = new HashSet<>();
     private String position;
     private String requirements;

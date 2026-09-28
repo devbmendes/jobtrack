@@ -8,7 +8,8 @@ import java.util.List;
 public interface JobApplicationService {
 
     public JobApplication saveJobApplication(JobAppRequest userJobAppRequest);
-
     public List<JobApplication> findAll();
+    public JobApplication findById(Long id);
+    public void deleteById(Long id);
 
 }

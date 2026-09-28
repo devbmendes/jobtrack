@@ -8,6 +8,7 @@ import com.devbmendes.jobtrack.repository.CompanyRepository;
 import com.devbmendes.jobtrack.repository.JobApplicationRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class JobApplicationServiceImpl implements JobApplicationService{
         this.jobApplicationRepository = jobApplicationRepository;
         this.companyRepository = companyRepository;
     }
-
+    @Override
     public JobApplication findById(Long jobApplicationId) {
 
         return jobApplicationRepository.findById(jobApplicationId)
@@ -32,6 +33,16 @@ public class JobApplicationServiceImpl implements JobApplicationService{
                                         + " not found"
                         ));
     }
+
+    @Override
+    public void deleteById(Long id) {
+        Optional<JobApplication> jobApplication = jobApplicationRepository.findById(id);
+        if (jobApplication.isEmpty()){
+            throw new ResourceNotFoundException("JobApplication with this ID :"+id+" not found");
+        }
+        jobApplicationRepository.deleteById(id);
+    }
+
     public Company findCompanyById(Long id){
         Optional<Company> company = companyRepository.findById(id);
         if (company.isEmpty()){
@@ -46,7 +57,9 @@ public class JobApplicationServiceImpl implements JobApplicationService{
         Company companyJobApplication = findCompanyById(jobAppRequest.getCompanyId());
         jobApplication.setCompany(companyJobApplication);
         jobApplication.setLocation(jobAppRequest.getLocation());
+        jobApplication.setRequirements(jobAppRequest.getRequirements());
         jobApplication.setPosition(jobAppRequest.getPosition());
+        jobApplication.setCreatedAt(LocalDateTime.now());
         jobApplication.setNotes(jobAppRequest.getNotes());
 
         return jobApplicationRepository.save(jobApplication);
