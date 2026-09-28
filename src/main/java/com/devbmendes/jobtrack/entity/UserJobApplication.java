@@ -46,6 +46,10 @@ public class UserJobApplication {
         return reference;
     }
 
+    public String getReference() {
+        return reference;
+    }
+
     public void setUserJobReference(String reference) {
         this.reference = reference;
     }

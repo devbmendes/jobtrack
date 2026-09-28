@@ -74,16 +74,30 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
     }
 
     @Override
-    public UserJobApplication findByReference(String reference) {
-        return userJobApplicationRepository.findByReference(reference)
-                .orElseThrow(()-> new ResourceNotFoundException("Application with this reference : "+reference+" not found")
-                );
+    public UserJobAppResponse findByReference(String reference) {
+        Optional<UserJobApplication> userJobApplication = userJobApplicationRepository.findByReference(reference);
+               if (userJobApplication.isEmpty()){
+                   throw new ResourceNotFoundException("UserJobApplication with this REFERENCE : "
+                   +reference+" not found");
+               }
+               UserJobAppResponse userJobAppResponse = new UserJobAppResponse();
+               userJobAppResponse.setJobApplicationId(userJobApplication.get().getId());
+               userJobAppResponse.setUserJobReference(userJobApplication.get().getUserJobReference());
+               userJobAppResponse.setStatus(userJobApplication.get().getStatus().toString());
+               userJobAppResponse.setCreatedAt(userJobApplication.get().getCreatedAt().toString());
+
+               return userJobAppResponse;
     }
 
     @Override
     public void updateStatusJob(UpdateStatusRequest request) {
 
-        UserJobApplication userJobApplication = findByReference(request.getReference());
+        Optional<UserJobApplication> userJobApplication = userJobApplicationRepository
+                .findByReference(request.getReference());
+        if (userJobApplication.isEmpty()){
+            throw new ResourceNotFoundException("UserJobApplication with this REFERENCE : "
+                    +request.getReference() +" not found");
+        }
         Status status;
 
         try {
@@ -96,8 +110,8 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
             );
         }
 
-        userJobApplication.setStatus(status);
-        userJobApplicationRepository.save(userJobApplication);
+        userJobApplication.get().setStatus(status);
+        userJobApplicationRepository.save(userJobApplication.get());
     }
 
     @Override

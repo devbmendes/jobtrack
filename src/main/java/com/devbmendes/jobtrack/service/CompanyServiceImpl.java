@@ -19,7 +19,7 @@ public class CompanyServiceImpl implements CompanyService{
     public CompanyServiceImpl(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
-    CompanyResponse convertCompany(Company company){
+    public CompanyResponse convertCompany(Company company){
         return new CompanyResponse(company.getName(),company.getWebsiteUrl(),
                 company.getLocation(),company.getDescription(),company.getCreatedAt());
     }
@@ -93,7 +93,10 @@ public class CompanyServiceImpl implements CompanyService{
     }
 
     @Override
-    public Optional<CompanyResponse> findByName(String name) {
-        return Optional.empty();
+    public Company findByName(String name) {
+        return companyRepository.findByNameIgnoreCase(name).orElseThrow(
+                ()-> new ResourceNotFoundException("Company with this name : "+name+" not found")
+        );
+        
     }
 }
