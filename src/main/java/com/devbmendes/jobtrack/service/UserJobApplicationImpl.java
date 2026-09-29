@@ -89,11 +89,20 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
                return userJobAppResponse;
     }
 
+    private UserJobApplication isReferenceValid(String reference){
+        Optional<UserJobApplication> userJobApplication = userJobApplicationRepository
+                .findByReference(reference.toUpperCase());
+        if (userJobApplication.isEmpty()){
+            throw new ResourceNotFoundException("UserJobApplication with this REFERENCE : "
+                    +reference +" not found");
+        }
+        return userJobApplication.get();
+    }
     @Override
     public void updateStatusJob(UpdateStatusRequest request) {
 
         Optional<UserJobApplication> userJobApplication = userJobApplicationRepository
-                .findByReference(request.getReference());
+                .findByReference(request.getReference().toUpperCase());
         if (userJobApplication.isEmpty()){
             throw new ResourceNotFoundException("UserJobApplication with this REFERENCE : "
                     +request.getReference() +" not found");
@@ -144,5 +153,31 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
         }
         return userJobApplicationRepository.findByUserIdAndStatus(userId,status);
 
+    }
+    @Override
+    public void updateStatus(String reference){
+        UserJobApplication userJobApplication = isReferenceValid(reference.toUpperCase());
+
+        if (userJobApplication.getStatus().toString().equals("APPLIED")){
+            userJobApplication.setStatus(Status.SCREENING);
+            userJobApplicationRepository.save(userJobApplication);
+        } else if (userJobApplication.getStatus().toString().equals("SCREENING")) {
+            userJobApplication.setStatus(Status.INTERVIEW);
+            userJobApplicationRepository.save(userJobApplication);
+        } else if (userJobApplication.getStatus().toString().equals("INTERVIEW")) {
+            userJobApplication.setStatus(Status.OFFER);
+            userJobApplicationRepository.save(userJobApplication);
+        } else if (userJobApplication.getStatus().toString().equals("REJECTED")) {
+            throw new InvalidStatusException("UserJobApplication with this reference" +
+                    " : "+reference+" is already REJECTED");
+
+        }
+    }
+    @Override
+    public int rejectUserJob(String reference){
+        UserJobApplication userJobApplication = isReferenceValid(reference);
+        userJobApplication.setStatus(Status.REJECTED);
+        userJobApplicationRepository.save(userJobApplication);
+        return 1;
     }
 }

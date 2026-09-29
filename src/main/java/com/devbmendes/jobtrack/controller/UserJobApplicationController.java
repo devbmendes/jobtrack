@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/job-applications")
+@RequestMapping("/api/user-job-applications")
 public class UserJobApplicationController {
     private final UserJobApplicationService userJobApplicationService;
 
@@ -38,13 +38,9 @@ public class UserJobApplicationController {
                 ));
     }
     @PatchMapping("/update")
-    public ResponseEntity<ApiResponse<Void>> updateStatus(@Valid @RequestBody
-            UpdateStatusRequest updateStatusRequest) {
+    public ResponseEntity<ApiResponse<Void>> updateStatus(@RequestParam String reference) {
 
-        userJobApplicationService.updateStatusJob(
-                updateStatusRequest
-        );
-
+        userJobApplicationService.updateStatus(reference);
         return ResponseEntity.ok(
                 new ApiResponse<>(
                         "Application status updated successfully",
