@@ -7,20 +7,22 @@ import com.devbmendes.jobtrack.enums.Role;
 import com.devbmendes.jobtrack.exceptions.EmailAlreadyExistsException;
 import com.devbmendes.jobtrack.exceptions.ResourceNotFoundException;
 import com.devbmendes.jobtrack.repository.UserRepository;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService{
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(UserRepository userRepository){
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     private UserResponse convertUser(User user){
@@ -33,7 +35,7 @@ public class UserServiceImpl implements UserService{
             User saveUser = new User();
             saveUser.setName(user.getName());
             saveUser.setEmail(user.getEmail());
-            saveUser.setPassword(user.getPassword());
+            saveUser.setPassword(passwordEncoder.encode(user.getPassword()));
             saveUser.setCreatedAt(LocalDateTime.now());
             if(user.getRole().equalsIgnoreCase("admin")){
                 saveUser.setRole(Role.ADMIN);

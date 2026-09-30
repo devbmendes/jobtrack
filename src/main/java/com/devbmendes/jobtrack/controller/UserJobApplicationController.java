@@ -54,7 +54,13 @@ public class UserJobApplicationController {
         return ResponseEntity.ok(new ApiResponse<>("UserJob deleted",
                 null));
     }
-    @GetMapping("/jobs")
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<List<UserJobApplication>>> findByUserId(@PathVariable Long id){
+        List<UserJobApplication> userJobApplicationList = userJobApplicationService.findByUserId(id);
+        return ResponseEntity.ok(new ApiResponse<>(
+                "UserJobApplication for this user",userJobApplicationList));
+    }
+    @GetMapping("/by-status")
     public List<UserJobApplication> findByStatus(@RequestParam Long userId, @RequestParam String status) {
          return userJobApplicationService.findByUserIdAndStatus(
                 userId,

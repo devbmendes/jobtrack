@@ -2,7 +2,6 @@ package com.devbmendes.jobtrack.service;
 
 import com.devbmendes.jobtrack.dto.UpdateStatusRequest;
 import com.devbmendes.jobtrack.dto.UserJobAppResponse;
-import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.JobApplication;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.entity.UserJobApplication;

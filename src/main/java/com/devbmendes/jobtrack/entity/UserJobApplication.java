@@ -1,6 +1,7 @@
 package com.devbmendes.jobtrack.entity;
 
 import com.devbmendes.jobtrack.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -16,10 +17,12 @@ public class UserJobApplication {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
     private User user;
 
     @ManyToOne
     @JoinColumn(name = "job_application_id", nullable = false)
+    @JsonIgnore
     private JobApplication jobApplication;
 
     @Enumerated(EnumType.STRING)
