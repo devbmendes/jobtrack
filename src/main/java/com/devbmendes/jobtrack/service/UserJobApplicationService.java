@@ -16,5 +16,6 @@ public interface UserJobApplicationService {
     List<UserJobApplication> findByUserIdAndStatus(Long userId, String status);
     public void updateStatus(String reference);
     public int rejectUserJob(String reference);
+    public List<UserJobApplication> findByUserId(Long id);
 
 }

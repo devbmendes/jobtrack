@@ -2,6 +2,7 @@ package com.devbmendes.jobtrack.service;
 
 import com.devbmendes.jobtrack.dto.UpdateStatusRequest;
 import com.devbmendes.jobtrack.dto.UserJobAppResponse;
+import com.devbmendes.jobtrack.dto.UserResponse;
 import com.devbmendes.jobtrack.entity.JobApplication;
 import com.devbmendes.jobtrack.entity.User;
 import com.devbmendes.jobtrack.entity.UserJobApplication;
@@ -22,12 +23,14 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
     private final UserRepository userRepository;
     private final JobApplicationServiceImpl jobApplicationService;
     private final UserJobApplicationRepository userJobApplicationRepository;
+    private final UserService userService;
 
     public UserJobApplicationImpl(UserRepository userRepository,
-                                  JobApplicationServiceImpl  jobApplicationService, UserJobApplicationRepository userJobApplicationRepository) {
+                                  JobApplicationServiceImpl  jobApplicationService, UserJobApplicationRepository userJobApplicationRepository, UserService userService) {
         this.userRepository = userRepository;
         this.jobApplicationService = jobApplicationService;
         this.userJobApplicationRepository = userJobApplicationRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -179,5 +182,11 @@ public class UserJobApplicationImpl implements UserJobApplicationService {
         userJobApplication.setStatus(Status.REJECTED);
         userJobApplicationRepository.save(userJobApplication);
         return 1;
+    }
+
+    @Override
+    public List<UserJobApplication> findByUserId(Long id) {
+        userService.findById(id);
+        return userJobApplicationRepository.findByUserId(id);
     }
 }
